@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String       @id @default(uuid())
+  name       String
+  username   String       @unique
+  password   String
+  photoUrl   String
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @default(now())
+  Level      Level[]
+  Followers  Followers[]
+  Following  Following[]
+  Tasks      Tasks[]
+  Activities Activities[]
+}
+
+model Level {
+  id             String   @id @default(uuid())
+  userId         String
+  currentLevel   Int      @default(0)
+  currentLevelXp Int      @default(0)
+  nextLevelXp    Int      @default(10)
+  createdAt      DateTime @default(now())
+  user           User     @relation(fields: [userId], references: [id])
+}
+
+model Followers {
+  id             String   @id @default(uuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  followersUsers String[]
+  followers      Int      @default(0)
+  createdAt      DateTime
+}
+
+model Following {
+  id             String   @id @default(uuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  followingUsers String[]
+  following      Int      @default(0)
+  createdAt      DateTime
+}
+
+model Tasks {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  weekDay   String
+  title     String
+  time      String
+  priority  String
+  isDone    Boolean  @default(false)
+  tasks     String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model Activities {
+  id                  String   @id @default(uuid())
+  userId              String
+  user                User     @relation(fields: [userId], references: [id])
+  activitiesCompleted Int      @default(0)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @default(now())
+}
