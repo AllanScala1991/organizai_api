@@ -64,6 +64,10 @@ export class UserService {
 
         if(!userId) return { status: 400, message: 'ID de usuário inválido.' }
 
+        const userExists = await this.userRepository.getUserById(userId);
+
+        if(!userExists) return { status: 404, message: "Usuário não localizado." }
+
         user.updatedAt = new Date()
 
         await this.userRepository.updateUserById(user, userId);
