@@ -1,4 +1,5 @@
 export interface CreateUserModel {
+    id?: string
     name: string
     username: string
     password: string
