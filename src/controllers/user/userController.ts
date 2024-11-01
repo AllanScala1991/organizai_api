@@ -4,17 +4,27 @@ import { EncrypterModel } from "../../models/encrypter/encrypterModel";
 import { UserRepository } from "../../repositories/user/userRepository";
 import { UserService } from "../../services/user/userService";
 import { CreateUserModel } from "../../models/user/userModel";
+import { UserLevelService } from "../../services/level/userLevelService";
+import { UserLevelRepository } from "../../repositories/level/userLevelRepository";
 
 
 export class UserController {
     private userRepository: UserRepository
     private encrypter: EncrypterModel
     private userService: UserService
+    private userLevelService: UserLevelService
+    private userLevelRepository: UserLevelRepository
 
     constructor(){
         this.userRepository = new UserRepository();
         this.encrypter = new Bcrypt();
-        this.userService = new UserService(this.encrypter, this.userRepository);
+        this.userLevelRepository = new UserLevelRepository()
+        this.userLevelService = new UserLevelService(this.userLevelRepository);
+        this.userService = new UserService(
+            this.encrypter, 
+            this.userRepository, 
+            this.userLevelService
+        );
     }
 
     async createUser(req: Request, res: Response) {

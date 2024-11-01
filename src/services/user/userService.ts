@@ -2,11 +2,13 @@ import { EncrypterModel } from "../../models/encrypter/encrypterModel";
 import { ResponseModel } from "../../models/response/responseModel";
 import { CreateUserModel } from "../../models/user/userModel";
 import { UserRepository } from "../../repositories/user/userRepository";
+import { UserLevelService } from "../level/userLevelService";
 
 export class UserService {
     constructor(
          private encrypter: EncrypterModel,
-         private userRepository: UserRepository
+         private userRepository: UserRepository,
+         private userLevelService: UserLevelService
     ){}
 
     async createUser(user: CreateUserModel): Promise<ResponseModel> {
@@ -28,6 +30,8 @@ export class UserService {
         
         delete createdUser.password
 
+        await this.userLevelService.createLevel({ userId: createdUser.id});
+
         return { status: 201, data: createdUser}
     }
 
@@ -40,7 +44,9 @@ export class UserService {
 
         delete user.password
 
-        return { status: 200, data: user }
+        const userLevel = await this.userLevelService.findUserLevel(userId);
+
+        return { status: 200, data: { user, userLevel } }
     }
 
     async findUserByUsername(username: string): Promise<ResponseModel> {

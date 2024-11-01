@@ -24,7 +24,7 @@ model User {
 
 model Level {
   id             String   @id @default(uuid())
-  userId         String
+  userId         String   @unique
   currentLevel   Int      @default(0)
   currentLevelXp Int      @default(0)
   nextLevelXp    Int      @default(10)
@@ -34,7 +34,7 @@ model Level {
 
 model Followers {
   id             String   @id @default(uuid())
-  userId         String
+  userId         String   @unique
   user           User     @relation(fields: [userId], references: [id])
   followersUsers String[]
   followers      Int      @default(0)
@@ -43,7 +43,7 @@ model Followers {
 
 model Following {
   id             String   @id @default(uuid())
-  userId         String
+  userId         String   @unique
   user           User     @relation(fields: [userId], references: [id])
   followingUsers String[]
   following      Int      @default(0)
@@ -52,7 +52,7 @@ model Following {
 
 model Tasks {
   id        String   @id @default(uuid())
-  userId    String
+  userId    String   @unique
   user      User     @relation(fields: [userId], references: [id])
   weekDay   String
   title     String
@@ -66,7 +66,7 @@ model Tasks {
 
 model Activities {
   id                  String   @id @default(uuid())
-  userId              String
+  userId              String   @unique
   user                User     @relation(fields: [userId], references: [id])
   activitiesCompleted Int      @default(0)
   createdAt           DateTime @default(now())
