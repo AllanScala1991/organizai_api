@@ -1,12 +1,16 @@
 import { Bcrypt } from "../../lib/bcryptjs/bcryptjs"
+import { UserLevelRepository } from "../../repositories/level/userLevelRepository";
 import { UserRepository } from "../../repositories/user/userRepository"
+import { UserLevelService } from "../level/userLevelService";
 import { UserService } from "./userService";
 
 
 describe("User Service Tests", () => {
     const userRepository = new UserRepository()
     const encrypter = new Bcrypt();
-    const userService = new UserService(encrypter, userRepository);
+    const userLevelRepository = new UserLevelRepository()
+    const userLevelService = new UserLevelService(userLevelRepository);
+    const userService = new UserService(encrypter, userRepository, userLevelService);
     const userResponse = {
         id: "123456789",
         name: "Roberto dos Santos",
@@ -21,6 +25,7 @@ describe("User Service Tests", () => {
         jest.spyOn(userRepository, "findUserByUsername").mockImplementationOnce((): any => false);
         jest.spyOn(encrypter, "encrypt").mockImplementationOnce((): any => "ajs627ngda72b");
         jest.spyOn(userRepository, "createUser").mockImplementationOnce((): any => userResponse);
+        jest.spyOn(userLevelService, 'createLevel').mockImplementationOnce((): any => {});
 
         const createNewUser = await userService.createUser({
             name: "Roberto dos Santos",
@@ -61,6 +66,7 @@ describe("User Service Tests", () => {
 
     test("Get user by ID", async () => {
         jest.spyOn(userRepository, "getUserById").mockImplementationOnce((): any => userResponse);
+        jest.spyOn(userLevelService, 'findUserLevel').mockImplementationOnce((): any => {});
 
         const getUserById = await userService.getUserById("123456789");
 

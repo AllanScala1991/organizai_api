@@ -23,15 +23,16 @@ export class UserLevelService {
     }
 
     async updateUserLevel(userId: string): Promise<ResponseModel> {
-        const user = await this.findUserLevel(userId);
+        const user = await this.userLevelRepository.findLevelByUserId(userId);
+
+        if(!user) return { status: 404, message: 'Erro ao localizar o nível do usuário.'}
         user.currentLevelXp += 1
 
         if(user.currentLevelXp == user.nextLevelXp) {
             user.currentLevelXp = 0
             user.currentLevel += 1
             await this.userLevelRepository.updateUserLevel(user)
-            const userLevelUpdated = await this.findUserLevel(userId)
-            return { status: 200, data: userLevelUpdated }
+            return { status: 200, data: user }
         }
 
         if(user.currentLevelXp > user.nextLevelXp) {
@@ -39,13 +40,11 @@ export class UserLevelService {
             user.currentLevelXp = currentXp
             user.currentLevel += 1
             await this.userLevelRepository.updateUserLevel(user)
-            const userLevelUpdated = await this.findUserLevel(userId)
-            return { status: 200, data: userLevelUpdated }
+            return { status: 200, data: user }
         }
 
         await this.userLevelRepository.updateUserLevel(user)
-        const userLevelUpdated = await this.findUserLevel(userId)
-        return { status: 200, data: userLevelUpdated }
+        return { status: 200, data: user }
     }
 
 }
