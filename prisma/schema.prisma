@@ -38,7 +38,7 @@ model Followers {
   user           User     @relation(fields: [userId], references: [id])
   followersUsers String[]
   followers      Int      @default(0)
-  createdAt      DateTime
+  createdAt      DateTime @default(now())
 }
 
 model Following {
@@ -47,7 +47,7 @@ model Following {
   user           User     @relation(fields: [userId], references: [id])
   followingUsers String[]
   following      Int      @default(0)
-  createdAt      DateTime
+  createdAt      DateTime @default(now())
 }
 
 model Tasks {
