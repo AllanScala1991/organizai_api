@@ -24,6 +24,7 @@ app.use(express.json());
 app.use(require('./routes/user/userRoute'));
 app.use(require('./routes/login/loginRoute'));
 app.use(require('./routes/level/userLevelRoute'));
+app.use(require('./routes/follow/followRoute'));
 
 //Server init
 app.listen(port, () => {

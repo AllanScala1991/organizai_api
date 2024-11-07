@@ -6,6 +6,8 @@ import { UserService } from "../../services/user/userService";
 import { CreateUserModel } from "../../models/user/userModel";
 import { UserLevelService } from "../../services/level/userLevelService";
 import { UserLevelRepository } from "../../repositories/level/userLevelRepository";
+import { FollowerRepository } from "../../repositories/follower/followerRepository";
+import { FollowingRepository } from "../../repositories/following/followingRepository";
 
 
 export class UserController {
@@ -14,16 +16,22 @@ export class UserController {
     private userService: UserService
     private userLevelService: UserLevelService
     private userLevelRepository: UserLevelRepository
+    private followerRepository: FollowerRepository
+    private followingRepository: FollowingRepository
 
     constructor(){
         this.userRepository = new UserRepository();
         this.encrypter = new Bcrypt();
         this.userLevelRepository = new UserLevelRepository()
+        this.followerRepository = new FollowerRepository()
+        this.followingRepository = new FollowingRepository()
         this.userLevelService = new UserLevelService(this.userLevelRepository);
         this.userService = new UserService(
             this.encrypter, 
             this.userRepository, 
-            this.userLevelService
+            this.userLevelService,
+            this.followerRepository,
+            this.followingRepository
         );
     }
 

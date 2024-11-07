@@ -1,6 +1,8 @@
 import { EncrypterModel } from "../../models/encrypter/encrypterModel";
 import { ResponseModel } from "../../models/response/responseModel";
 import { CreateUserModel } from "../../models/user/userModel";
+import { FollowerRepository } from "../../repositories/follower/followerRepository";
+import { FollowingRepository } from "../../repositories/following/followingRepository";
 import { UserRepository } from "../../repositories/user/userRepository";
 import { UserLevelService } from "../level/userLevelService";
 
@@ -8,7 +10,9 @@ export class UserService {
     constructor(
          private encrypter: EncrypterModel,
          private userRepository: UserRepository,
-         private userLevelService: UserLevelService
+         private userLevelService: UserLevelService,
+         private followerRepository: FollowerRepository,
+         private followingRepository: FollowingRepository
     ){}
 
     async createUser(user: CreateUserModel): Promise<ResponseModel> {
@@ -31,6 +35,14 @@ export class UserService {
         delete createdUser.password
 
         await this.userLevelService.createLevel({ userId: createdUser.id});
+        await this.followerRepository.createFollowerTable({
+            userId: createdUser.id,
+            followersUsers: []
+        })
+        await this.followingRepository.createFollowingTable({
+            userId: createdUser.id,
+            followingUsers: []
+        })
 
         return { status: 201, data: createdUser}
     }

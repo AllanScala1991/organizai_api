@@ -14,16 +14,21 @@ export class FollowService {
 
         const getAllFollowers = await this.followerRepository.getAllFollowers(userId);
         const followersId = getAllFollowers.followersUsers;
-        followersId.push(followerId);
-        const followers = getAllFollowers.followers + 1;
+        let followers = getAllFollowers.followers
+        if(!followersId.includes(followerId)){
+            followersId.push(followerId);
+            followers += 1
+        }
         await this.followerRepository.updateFollower(userId, followersId, followers);
 
         const getAllFollowings = await this.followingRepository.getAllFollowing(followerId);
         const followingsId = getAllFollowings.followingUsers;
-        followingsId.push(userId);
-        const following = getAllFollowings.following + 1
+        let following = getAllFollowings.following
+        if(!followingsId.includes(userId)){
+            followingsId.push(userId);
+            following += 1
+        }
         await this.followingRepository.updateFollowing(followerId, followingsId, following);
-
         return { status: 200 }
     }
 
@@ -57,15 +62,24 @@ export class FollowService {
 
         const getAllFollowers = await this.followerRepository.getAllFollowers(userId);
         const followersId = getAllFollowers.followersUsers;
-        const updatedFollowers = followersId.filter(item => item !== followerId)
-        const followers = getAllFollowers.followers - 1;
-        await this.followerRepository.updateFollower(userId, updatedFollowers, followers);
+        let followers = getAllFollowers.followers
+        let index = followersId.indexOf(followerId)
+        console.log(index)
+        if(index !== -1) {
+            followersId.splice(index, 1)
+            followers -= 1
+        }
+        await this.followerRepository.updateFollower(userId, followersId, followers);
 
         const getAllFollowings = await this.followingRepository.getAllFollowing(followerId);
         const followingsId = getAllFollowings.followingUsers;
-        const updatedFollowings = followingsId.filter(item => item !== userId)
-        const following = getAllFollowings.following - 1
-        await this.followingRepository.updateFollowing(followerId, updatedFollowings, following);
+        let following = getAllFollowings.following
+        let followingIndex = followingsId.indexOf(userId)
+        if(followingIndex !== -1) {
+            followingsId.splice(followingIndex, 1)
+            following -= 1
+        }
+        await this.followingRepository.updateFollowing(followerId, followingsId, following);
 
         return { status: 200 }
     }
