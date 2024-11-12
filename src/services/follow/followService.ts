@@ -64,7 +64,6 @@ export class FollowService {
         const followersId = getAllFollowers.followersUsers;
         let followers = getAllFollowers.followers
         let index = followersId.indexOf(followerId)
-        console.log(index)
         if(index !== -1) {
             followersId.splice(index, 1)
             followers -= 1
