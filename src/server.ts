@@ -25,6 +25,7 @@ app.use(require('./routes/user/userRoute'));
 app.use(require('./routes/login/loginRoute'));
 app.use(require('./routes/level/userLevelRoute'));
 app.use(require('./routes/follow/followRoute'));
+app.use(require('./routes/tasks/tasksRoute'));
 
 //Server init
 app.listen(port, () => {

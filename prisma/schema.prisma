@@ -52,14 +52,13 @@ model Following {
 
 model Tasks {
   id        String   @id @default(uuid())
-  userId    String   @unique
+  userId    String   
   user      User     @relation(fields: [userId], references: [id])
   weekDay   String
   title     String
   time      String
   priority  String
   isDone    Boolean  @default(false)
-  tasks     String[]
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 }
