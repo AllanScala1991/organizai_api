@@ -8,6 +8,8 @@ import { UserLevelService } from "../../services/level/userLevelService";
 import { UserLevelRepository } from "../../repositories/level/userLevelRepository";
 import { FollowerRepository } from "../../repositories/follower/followerRepository";
 import { FollowingRepository } from "../../repositories/following/followingRepository";
+import { ActivitieRepository } from "../../repositories/activities/activitieRepository";
+import { ActivitieService } from "../../services/activities/activitieService";
 
 
 export class UserController {
@@ -18,6 +20,8 @@ export class UserController {
     private userLevelRepository: UserLevelRepository
     private followerRepository: FollowerRepository
     private followingRepository: FollowingRepository
+    private activitieRepository: ActivitieRepository
+    private activitieService: ActivitieService
 
     constructor(){
         this.userRepository = new UserRepository();
@@ -25,13 +29,16 @@ export class UserController {
         this.userLevelRepository = new UserLevelRepository()
         this.followerRepository = new FollowerRepository()
         this.followingRepository = new FollowingRepository()
+        this.activitieRepository = new ActivitieRepository();
+        this.activitieService = new ActivitieService(this.activitieRepository)
         this.userLevelService = new UserLevelService(this.userLevelRepository);
         this.userService = new UserService(
             this.encrypter, 
             this.userRepository, 
             this.userLevelService,
             this.followerRepository,
-            this.followingRepository
+            this.followingRepository,
+            this.activitieService
         );
     }
 

@@ -4,6 +4,7 @@ import { CreateUserModel } from "../../models/user/userModel";
 import { FollowerRepository } from "../../repositories/follower/followerRepository";
 import { FollowingRepository } from "../../repositories/following/followingRepository";
 import { UserRepository } from "../../repositories/user/userRepository";
+import { ActivitieService } from "../activities/activitieService";
 import { UserLevelService } from "../level/userLevelService";
 
 export class UserService {
@@ -12,7 +13,8 @@ export class UserService {
          private userRepository: UserRepository,
          private userLevelService: UserLevelService,
          private followerRepository: FollowerRepository,
-         private followingRepository: FollowingRepository
+         private followingRepository: FollowingRepository,
+         private activitieService: ActivitieService
     ){}
 
     async createUser(user: CreateUserModel): Promise<ResponseModel> {
@@ -35,14 +37,18 @@ export class UserService {
         delete createdUser.password
 
         await this.userLevelService.createLevel({ userId: createdUser.id});
+
         await this.followerRepository.createFollowerTable({
             userId: createdUser.id,
             followersUsers: []
         })
+
         await this.followingRepository.createFollowingTable({
             userId: createdUser.id,
             followingUsers: []
         })
+        
+        await this.activitieService.createActivitie({userId: createdUser.id});
 
         return { status: 201, data: createdUser}
     }
