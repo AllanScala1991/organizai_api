@@ -21,7 +21,7 @@ export class ActivitieService {
 
         const activitie = await this.activitieRepository.findActivitieByUserId(userId);
 
-        if(!activitie) return { status: 404, message: 'Nenhum dados de conquista localizado.' }
+        if(!activitie) return { status: 404, message: 'Nenhum dado de conquista localizado.' }
 
         return { status: 200, data: activitie }
     }
@@ -31,7 +31,7 @@ export class ActivitieService {
 
         const activitieExists = await this.activitieRepository.findActivitieByUserId(userId);
 
-        if(!activitieExists) return { status: 400, message: 'Dados de conquistas não localizado.' }
+        if(!activitieExists) return { status: 404, message: 'Dados de conquistas não localizado.' }
 
         activitieExists.activitiesCompleted += 1;
 
