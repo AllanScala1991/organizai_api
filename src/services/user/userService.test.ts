@@ -1,8 +1,10 @@
 import { Bcrypt } from "../../lib/bcryptjs/bcryptjs"
+import { ActivitieRepository } from "../../repositories/activities/activitieRepository";
 import { FollowerRepository } from "../../repositories/follower/followerRepository";
 import { FollowingRepository } from "../../repositories/following/followingRepository";
 import { UserLevelRepository } from "../../repositories/level/userLevelRepository";
 import { UserRepository } from "../../repositories/user/userRepository"
+import { ActivitieService } from "../activities/activitieService";
 import { UserLevelService } from "../level/userLevelService";
 import { UserService } from "./userService";
 
@@ -14,7 +16,9 @@ describe("User Service Tests", () => {
     const userLevelService = new UserLevelService(userLevelRepository);
     const followerRepository = new FollowerRepository();
     const followingRepository = new FollowingRepository();
-    const userService = new UserService(encrypter, userRepository, userLevelService, followerRepository, followingRepository);
+    const activitieRepository = new ActivitieRepository();
+    const activitieService = new ActivitieService(activitieRepository)
+    const userService = new UserService(encrypter, userRepository, userLevelService, followerRepository, followingRepository, activitieService);
     const userResponse = {
         id: "123456789",
         name: "Roberto dos Santos",
@@ -32,6 +36,7 @@ describe("User Service Tests", () => {
         jest.spyOn(userLevelService, 'createLevel').mockImplementationOnce((): any => {});
         jest.spyOn(followerRepository, 'createFollowerTable').mockImplementationOnce((): any => {});
         jest.spyOn(followingRepository, 'createFollowingTable').mockImplementationOnce((): any => {});
+        jest.spyOn(activitieRepository, 'createActivitie').mockImplementationOnce((): any => {});
 
         const createNewUser = await userService.createUser({
             name: "Roberto dos Santos",
