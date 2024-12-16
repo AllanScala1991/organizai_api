@@ -1,0 +1,68 @@
+name: CI Workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      prisma-db:
+        image: postgres:14.5  # ou o banco de dados que você estiver usando
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: root
+          POSTGRES_DB: organizai_db
+        ports:
+          - 5432:5432
+        options: --health-cmd="pg_isready -U prisma" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20.18.0'  # ou a versão do Node que sua API usa
+
+    - name: Install dependencies
+      run: |
+        npm install
+
+    - name: Set up Prisma
+      run: |
+        npx prisma migrate deploy  # Aplica as migrações do Prisma no banco de dados
+        npx prisma generate  # Gera o client do Prisma
+
+    - name: Build and start the Node.js API
+      run: |
+        npm run dev &
+      env:
+        DATABASE_URL: "postgresql://prisma:prisma@localhost:5432/prisma_db"  # URL do banco de dados Prisma
+
+    - name: Wait for the API to start
+      run: |
+        # Aguarda alguns segundos para garantir que a API e o banco estejam prontos
+        sleep 10
+
+    - name: Clone Cypress test repository
+      run: |
+        git clone https://github.com/AllanScala1991/organizai_api_tests
+        cd organizai_api_tests
+        npm install
+
+    - name: Run Cypress tests
+      run: |
+        npx cypress run
+      working-directory: organizai_api_tests
+
+    - name: Cleanup
+      run: |
+        kill $(jobs -p)  # Encerra a API para liberar a execução
