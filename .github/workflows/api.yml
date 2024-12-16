@@ -45,7 +45,7 @@ jobs:
       run: |
         npm run dev &
       env:
-        DATABASE_URL: "postgresql://prisma:prisma@localhost:5432/prisma_db"  # URL do banco de dados Prisma
+        DATABASE_URL: "postgresql://postgres:root@localhost:5432/organizai_db?"  # URL do banco de dados Prisma
 
     - name: Wait for the API to start
       run: |
