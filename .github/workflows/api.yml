@@ -1,4 +1,4 @@
-name: CI Workflow
+name: API Workflow
 
 on:
   push:
@@ -38,6 +38,8 @@ jobs:
 
     - name: Set up Prisma
       run: |
+        # Defina a variável DATABASE_URL para se conectar ao banco de dados do Docker
+        echo "postgresql://postgres:root@localhost:5432/organizai_db?" >> .env
         npx prisma migrate deploy  # Aplica as migrações do Prisma no banco de dados
         npx prisma generate  # Gera o client do Prisma
 
