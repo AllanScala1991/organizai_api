@@ -5,6 +5,7 @@ import { FollowingRepository } from "../../repositories/following/followingRepos
 import { UserLevelRepository } from "../../repositories/level/userLevelRepository";
 import { UserRepository } from "../../repositories/user/userRepository"
 import { ActivitieService } from "../activities/activitieService";
+import { FollowService } from "../follow/followService";
 import { UserLevelService } from "../level/userLevelService";
 import { UserService } from "./userService";
 
@@ -16,9 +17,10 @@ describe("User Service Tests", () => {
     const userLevelService = new UserLevelService(userLevelRepository);
     const followerRepository = new FollowerRepository();
     const followingRepository = new FollowingRepository();
+    const followService = new FollowService(followerRepository, followingRepository)
     const activitieRepository = new ActivitieRepository();
     const activitieService = new ActivitieService(activitieRepository)
-    const userService = new UserService(encrypter, userRepository, userLevelService, followerRepository, followingRepository, activitieService);
+    const userService = new UserService(encrypter, userRepository, userLevelService, followerRepository, followingRepository, followService ,activitieService);
     const userResponse = {
         id: "123456789",
         name: "Roberto dos Santos",
@@ -183,6 +185,9 @@ describe("User Service Tests", () => {
     test("Delete user by id", async () => {
         jest.spyOn(userRepository, "getUserById").mockImplementationOnce((): any => userResponse);
         jest.spyOn(userRepository, "deleteUserById").mockImplementationOnce((): any => true);
+        jest.spyOn(userLevelService, 'deleteUserLevel').mockImplementationOnce((): any => {})
+        jest.spyOn(followService, 'deleteFollowigAndFollowerTableByUserId').mockImplementationOnce((): any => {})
+        jest.spyOn(activitieService, 'deleteActivitieByUserId').mockImplementationOnce((): any => {})
 
         const deleteUserById = await userService.deleteUSerById("123456789");
 

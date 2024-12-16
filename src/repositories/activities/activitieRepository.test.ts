@@ -41,4 +41,12 @@ describe("Activitie Repository Tests", () => {
 
         expect(prisma.activities.update).toHaveBeenCalled();
     })
+
+    test("Delete user activitie", async () => {
+        jest.spyOn(prisma.activities, 'delete').mockImplementationOnce((): any => {})
+
+        await activitieRepository.deleteActivitieByUserId('123')
+
+        expect(prisma.activities.delete).toHaveBeenCalled();
+    })
 })

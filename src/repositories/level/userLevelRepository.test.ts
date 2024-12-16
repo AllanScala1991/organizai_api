@@ -36,4 +36,12 @@ describe("User level repository tests", () => {
 
         expect(prisma.level.update).toHaveBeenCalled();
     })
+
+    test("Delete user level", async () => {
+        jest.spyOn(prisma.level, 'delete').mockImplementationOnce((): any => {})
+
+        await userLevelRepository.deleteUserLevel('123')
+
+        expect(prisma.level.delete).toHaveBeenCalled()
+    })
 })

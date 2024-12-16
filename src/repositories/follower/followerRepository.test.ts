@@ -43,4 +43,12 @@ describe("Follower Repository Tests", () => {
 
         expect(prisma.followers.findUnique).toHaveBeenCalled();
     })
+
+    test("Delete user follower", async () => {
+        jest.spyOn(prisma.followers, 'delete').mockImplementationOnce((): any => {})
+
+        await followerRepository.deleteFollowerTableByUserId('123');
+
+        expect(prisma.followers.delete).toHaveBeenCalled();
+    })
 })

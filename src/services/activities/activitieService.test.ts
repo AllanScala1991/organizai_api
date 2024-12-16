@@ -90,4 +90,12 @@ describe("Activitie Service Tests", () => {
         expect(activite.status).toEqual(404);
         expect(activite.message).toEqual('Dados de conquistas não localizado.')
     })
+
+    test("Delete activtie by user id", async () => {
+        jest.spyOn(activitieRepository, 'deleteActivitieByUserId').mockImplementationOnce((): any => {})
+
+        await activitieService.deleteActivitieByUserId('123');
+
+        expect(activitieRepository.deleteActivitieByUserId).toHaveBeenCalled();
+    })
 })

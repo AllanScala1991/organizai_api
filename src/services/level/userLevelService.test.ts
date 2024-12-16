@@ -114,4 +114,12 @@ describe("User Level Service Tests", () => {
         expect(userLevelUpdate.status).toEqual(404);
         expect(userLevelUpdate.message).toEqual('Erro ao localizar o nível do usuário.')
     })
+
+    test("Delete user level", async () => {
+        jest.spyOn(userLevelRespository, 'deleteUserLevel').mockImplementationOnce((): any => {})
+
+        userLevelService.deleteUserLevel('123');
+
+        expect(userLevelRespository.deleteUserLevel).toHaveBeenCalled();
+    })
 })

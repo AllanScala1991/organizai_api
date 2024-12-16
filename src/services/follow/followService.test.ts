@@ -126,4 +126,14 @@ describe("Follow Service Tests", () => {
         expect(unfollow.status).toEqual(400);
         expect(unfollow.message).toEqual('ID de Usuário ou de Seguidor inválido.');
     })
+
+    test("Delete user follower and following", async () => {
+        jest.spyOn(followerRepository, 'deleteFollowerTableByUserId').mockImplementationOnce((): any => {})
+        jest.spyOn(followingRepository, 'deleteFollowingTableByUserId').mockImplementationOnce((): any => {})
+
+        await followService.deleteFollowigAndFollowerTableByUserId('123');
+
+        expect(followerRepository.deleteFollowerTableByUserId).toHaveBeenCalled();
+        expect(followingRepository.deleteFollowingTableByUserId).toHaveBeenCalled();
+    })
 })
