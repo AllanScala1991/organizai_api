@@ -64,7 +64,3 @@ jobs:
       run: |
         npx cypress run
       working-directory: organizai_api_tests
-
-    - name: Cleanup
-      run: |
-        kill $(jobs -p)  # Encerra a API para liberar a execução
