@@ -5,6 +5,7 @@ import { FollowerRepository } from "../../repositories/follower/followerReposito
 import { FollowingRepository } from "../../repositories/following/followingRepository";
 import { UserRepository } from "../../repositories/user/userRepository";
 import { ActivitieService } from "../activities/activitieService";
+import { FollowService } from "../follow/followService";
 import { UserLevelService } from "../level/userLevelService";
 
 export class UserService {
@@ -14,6 +15,7 @@ export class UserService {
          private userLevelService: UserLevelService,
          private followerRepository: FollowerRepository,
          private followingRepository: FollowingRepository,
+         private followService: FollowService,
          private activitieService: ActivitieService
     ){}
 
@@ -105,6 +107,12 @@ export class UserService {
         const userExists = await this.userRepository.getUserById(userId);
 
         if(!userExists) return { status: 404, message: "Usuário não localizado ou já foi deletado." }
+
+        await this.userLevelService.deleteUserLevel(userId);
+
+        await this.followService.deleteFollowigAndFollowerTableByUserId(userId)
+        
+        await this.activitieService.deleteActivitieByUserId(userId);
 
         await this.userRepository.deleteUserById(userId)
 

@@ -27,4 +27,12 @@ export class ActivitieRepository implements ActivitiesRepositoryModel {
         })
     }
 
+    async deleteActivitieByUserId(userId: string): Promise<void> {
+        await prisma.activities.delete({
+            where: {
+                userId: userId
+            }
+        })
+    }
+
 }

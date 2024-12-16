@@ -82,4 +82,9 @@ export class FollowService {
 
         return { status: 200 }
     }
+
+    async deleteFollowigAndFollowerTableByUserId(userId: string): Promise<void> {
+        await this.followingRepository.deleteFollowingTableByUserId(userId);
+        await this.followerRepository.deleteFollowerTableByUserId(userId);
+    }
 }

@@ -28,5 +28,13 @@ export class FollowingRepository implements FollowingRepositoryModel {
             }
         })
     }
+
+    async deleteFollowingTableByUserId(userId: string): Promise<void> {
+        await prisma.following.delete({
+            where: {
+                userId: userId
+            }
+        })
+    }
     
 }

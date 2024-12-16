@@ -25,5 +25,12 @@ export class UserLevelRepository implements UserLevelRepositoryModel {
         })
     }
 
+    async deleteUserLevel(userId: string): Promise<void> {
+        await prisma.level.delete({
+            where: {
+                userId: userId
+            }
+        })
+    }
     
 }

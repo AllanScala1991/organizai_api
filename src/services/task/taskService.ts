@@ -1,3 +1,4 @@
+import { empty } from "@prisma/client/runtime/library";
 import { ResponseModel } from "../../models/response/responseModel";
 import { CreateTaskModel } from "../../models/tasks/tasksModel";
 import { TaskRepository } from "../../repositories/tasks/taskRepository";
@@ -10,7 +11,7 @@ export class TaskService {
 
     async createTask(task: CreateTaskModel): Promise<ResponseModel> {
         for(let index in task) {
-            if (!task[index]) {
+            if (task[index] === "") {
                 return { status: 400, message: 'Todos os campos devem ser preenchidos.' }
             }
         }

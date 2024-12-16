@@ -39,4 +39,8 @@ export class ActivitieService {
 
         return{ status: 200, data: activitieUpdated }
     }
+
+    async deleteActivitieByUserId(userId: string): Promise<void> {
+        await this.activitieRepository.deleteActivitieByUserId(userId);
+    }
 }

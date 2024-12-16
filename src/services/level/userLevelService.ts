@@ -47,4 +47,8 @@ export class UserLevelService {
         return { status: 200, data: user }
     }
 
+    async deleteUserLevel(userId: string): Promise<void> {
+        await this.userLevelRepository.deleteUserLevel(userId)
+    }
+
 }
